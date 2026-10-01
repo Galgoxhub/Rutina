@@ -459,8 +459,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
               <select id="empleados"><option value="">Elegí</option><option>1 a 5</option><option>6 a 20</option><option>21 a 50</option><option>51 a 200</option><option>Más de 200</option></select>
             </div>
           </div>
-          <div class="field"><label for="proceso">¿Qué te gustaría automatizar?</label>
-            <textarea id="proceso" required placeholder="Ej.: pasamos los pedidos de WhatsApp a una planilla y después a Tango."></textarea>
+          <div class="field"><label for="detalle">¿Qué te gustaría automatizar?</label>
+            <textarea id="detalle" required placeholder="Ej.: pasamos los pedidos de WhatsApp a una planilla y después a Tango."></textarea>
           </div>
           <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="website">No completar</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
           <p class="err" id="formErr" hidden></p>
@@ -503,7 +503,7 @@ async function saveLead(){
     const r = await fetch(SUPABASE_URL + "/rest/v1/leads", {
       method: "POST",
       headers: Object.assign({ "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" }, SUPABASE_KEY.startsWith("eyJ") ? { "Authorization": "Bearer " + SUPABASE_KEY } : {}),
-      body: JSON.stringify({ nombre: v("nombre"), empresa: v("empresa"), whatsapp: v("tel"), empleados: v("empleados") || null, proceso: v("proceso"), origen: "web" })
+      body: JSON.stringify({ nombre: v("nombre"), empresa: v("empresa"), whatsapp: v("tel"), empleados: v("empleados") || null, proceso: v("detalle"), origen: "web" })
     });
     return r.ok;
   }catch(_){ return false; }
@@ -644,7 +644,7 @@ const form = $("leadForm");
 form.addEventListener("submit", async e => {
   e.preventDefault();
   if ($("website").value) return;
-  const missing = ["nombre","empresa","tel","proceso"].filter(id => !$(id).value.trim());
+  const missing = ["nombre","empresa","tel","detalle"].filter(id => !$(id).value.trim());
   if (missing.length){ $("formErr").textContent = "Completá nombre, empresa, WhatsApp y qué querés automatizar."; $("formErr").hidden = false; $(missing[0]).focus(); return; }
   $("formErr").hidden = true;
   const btn = $("sendBtn"); btn.disabled = true; btn.textContent = "Enviando…";
