@@ -227,10 +227,24 @@ textarea{min-height:120px;resize:vertical}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media (max-width:540px){.two{grid-template-columns:1fr}}
 .err{color:#B42318;font-size:.9rem}
-.sent{background:var(--surface);border-radius:16px;padding:1.6rem;display:grid;gap:1rem}
-.sent{border:1px solid var(--line)}
-.sent .ok{width:48px;height:48px;border-radius:999px;background:var(--orange);display:grid;place-items:center}
-.sent .ok svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* Pop-up de confirmación */
+.modal{border:0;padding:0;background:transparent;max-width:calc(100vw - 32px);overflow:visible}
+.modal::backdrop{background:rgba(11,27,58,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal[open]{animation:pop .5s var(--ease)}
+.modal[open]::backdrop{animation:fadeIn .4s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}}
+@keyframes fadeIn{from{opacity:0}}
+.modal .box{position:relative;width:440px;max-width:100%;background:var(--surface);border-radius:24px;padding:2.4rem 2rem 2rem;display:grid;gap:.9rem;justify-items:center;text-align:center;box-shadow:0 30px 80px -20px rgba(11,27,58,.45)}
+.modal .x{position:absolute;top:.8rem;right:.8rem;width:36px;height:36px;border:0;border-radius:999px;background:transparent;color:var(--muted);font-size:1.4rem;line-height:1;cursor:pointer}
+.modal .x:hover{background:var(--bg);color:var(--ink)}
+.modal .ok{width:72px;height:72px;border-radius:999px;background:var(--orange);display:grid;place-items:center;margin-bottom:.4rem;box-shadow:0 0 0 10px var(--orange-soft)}
+.modal .ok svg{width:34px;height:34px;fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24}
+.modal[open] .ok svg{animation:tick .5s .25s var(--ease) forwards}
+@keyframes tick{to{stroke-dashoffset:0}}
+.modal h3{font-size:1.7rem;letter-spacing:-.03em}
+.modal p{color:var(--muted);max-width:32ch}
+.modal .btn{margin-top:.8rem}
+@media (prefers-reduced-motion:reduce){.modal[open],.modal[open]::backdrop{animation:none}.modal .ok svg{stroke-dashoffset:0;animation:none!important}}
 
 footer{padding-block:3rem;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
@@ -453,15 +467,20 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
           <div><button class="btn" type="submit" id="sendBtn">Pedir diagnóstico gratis</button></div>
         </form>
 
-        <div class="sent" id="sent" hidden tabindex="-1">
-          <span class="ok"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4L18 8"/></svg></span>
-          <h3 style="font-size:1.6rem;letter-spacing:-.02em" id="sentTitle">¡Gracias!</h3>
-          <p class="muted">Recibimos tu consulta. Te escribimos por WhatsApp en el día hábil para coordinar el diagnóstico gratis.</p>
-        </div>
       </div>
     </div>
   </section>
 </main>
+
+<dialog class="modal" id="sentDlg" aria-labelledby="sentTitle">
+  <div class="box">
+    <button type="button" class="x" id="sentX" aria-label="Cerrar">×</button>
+    <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4L18 8"/></svg></span>
+    <h3 id="sentTitle">¡Gracias!</h3>
+    <p>Recibimos tu consulta. En breve nos ponemos en contacto por WhatsApp para coordinar tu diagnóstico gratis.</p>
+    <button type="button" class="btn" id="sentOk">Entendido</button>
+  </div>
+</dialog>
 
 <footer>
   <div class="wrap">
@@ -634,8 +653,13 @@ form.addEventListener("submit", async e => {
   if (!ok){ $("formErr").textContent = "No pudimos enviar tu consulta. Probá de nuevo en unos minutos."; $("formErr").hidden = false; return; }
   const nombre = $("nombre").value.trim().split(/\s+/)[0];
   $("sentTitle").textContent = "¡Gracias, " + nombre + "!";
-  form.hidden = true; $("sent").hidden = false; $("sent").focus();
+  form.reset();
+  $("sentDlg").showModal();
 });
+const dlg = $("sentDlg");
+$("sentOk").addEventListener("click", () => dlg.close());
+$("sentX").addEventListener("click", () => dlg.close());
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
 </script>
 
 </body>
