@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&display=swap">
 <style>
-/* Layout: una columna con mucho aire, una idea por pantalla. Momento distintivo: el diagrama del empleado antes y después. Dirección única clara (azul). */
+/* Layout: aire medido, una idea por pantalla. Momentos visuales: el flujo animado del hero, la franja oscura, el diagrama del empleado y la línea de tiempo del proceso. */
 :root{
   --bg:#F6F7F9;
   --surface:#FFFFFF;
@@ -30,9 +30,10 @@
   color-scheme:light;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1200px;margin:0 auto;padding-inline:clamp(20px,6vw,120px)}
+.wrap{max-width:1680px;margin:0 auto;padding-inline:clamp(20px,5vw,96px)}
 a{color:var(--orange-ink)}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.04em;line-height:1.04;text-wrap:balance}
@@ -48,61 +49,129 @@ p{margin:0}
 /* Revelado de palabras: el estado de reposo es visible; la animación parte de un tenue gris */
 .split .w{display:inline-block;transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .js .split:not(.in) .w{opacity:.12;transform:translateY(.35em)}
-.fade{transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.fade{transition:opacity 1s var(--ease) var(--d,0s),transform 1s var(--ease) var(--d,0s)}
 .js .fade:not(.in){opacity:.15;transform:translateY(24px)}
 @media (prefers-reduced-motion:reduce){.split .w,.fade{transition:none!important;opacity:1!important;transform:none!important}html{scroll-behavior:auto}}
 
 /* Nav */
-header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+header.nav.scrolled{border-bottom-color:var(--line)}
 header.nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:1.4rem}
 .logo{font-weight:600;font-size:1.25rem;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
 .nav nav{display:flex;gap:2rem;align-items:center;font-size:.95rem}
 .nav nav a{color:var(--muted);text-decoration:none;transition:color .2s}
-.nav nav a:hover{color:var(--ink)}
+.nav nav a:hover,.nav nav a.active{color:var(--ink)}
 .nav nav a.cta{color:var(--orange-ink);font-weight:500}
 @media (max-width:720px){.nav nav a:not(.cta){display:none}}
 
 /* Hero */
-.hero{padding-block:clamp(5rem,14vw,11rem) clamp(5rem,12vw,9rem)}
+.hero{position:relative;padding-block:clamp(3.5rem,9vw,6.5rem) clamp(3rem,7vw,5rem)}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#C9D0DC 1px,transparent 1.5px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 78% 45%,#000,transparent 70%);mask-image:radial-gradient(ellipse 60% 70% at 78% 45%,#000,transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;gap:clamp(2.5rem,5vw,4.5rem);align-items:center}
+@media (min-width:980px){.hero .wrap{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}.hero .wrap h1{font-size:clamp(2.9rem,4.7vw,4.3rem)}}
 .hero h1{font-size:clamp(2.8rem,7.2vw,5.6rem);max-width:15ch}
 .hero h1 .accent{color:var(--blue)}
-.hero p{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--muted);max-width:34ch;margin-top:2.2rem}
-.hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2.8rem}
+.hero p{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--muted);max-width:34ch;margin-top:1.6rem}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
+
+/* Hero: flujo animado WhatsApp → agente → sistema */
+.flow{display:grid;max-width:480px;width:100%;justify-self:center}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:1rem 1.15rem;box-shadow:0 1px 2px rgba(11,27,58,.04),0 12px 32px -12px rgba(11,27,58,.14)}
+.fhead{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--muted);margin-bottom:.6rem}
+.fhead .time{margin-left:auto}
+.wa{width:22px;height:22px;border-radius:999px;background:#25D366;display:grid;place-items:center;color:#fff;flex:none}
+.wa svg{width:13px;height:13px}
+.bubble{background:#E7F8EC;border-radius:4px 14px 14px 14px;padding:.65rem .85rem;font-size:.95rem;line-height:1.45;max-width:30ch}
+.chip{background:var(--ink);color:#fff;border-radius:999px;padding:.2rem .6rem;font-size:.72rem;font-weight:500;letter-spacing:.01em}
+.kv{display:grid;gap:.35rem;margin:0;font-size:.92rem}
+.kv div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px dashed var(--line);padding-bottom:.35rem}
+.kv div:last-child{border:0;padding:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:500}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;font-size:.95rem}
+.checks li{display:flex;align-items:center;gap:.6rem}
+.checks li::before{content:"";flex:none;width:20px;height:20px;border-radius:999px;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6 10.5l2.6 2.5L14 7.5' fill='none' stroke='%230B1B3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.fline{height:34px;width:2px;margin-left:34px;background:var(--line);position:relative;overflow:hidden}
+.fline::after{content:"";position:absolute;left:0;top:-12px;width:2px;height:12px;background:var(--orange);border-radius:2px}
+.fline.on::after{animation:drip .7s var(--ease) forwards}
+@keyframes drip{to{top:34px}}
+.done{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.done b{color:var(--orange-ink);font-weight:600}
+.flow [data-s]{transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.flow.anim [data-s]:not(.on){opacity:0;transform:translateY(10px)}
+.flow.anim .fline:not(.on){opacity:.3}
+
+/* Franja oscura */
+.band{background:radial-gradient(circle at 88% 15%,rgba(243,128,32,.22),transparent 45%),var(--ink);color:#fff;padding-block:clamp(3.5rem,8vw,6rem)}
+.band .statement{color:#fff}
+.pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem;padding:0;list-style:none}
+.pills li{border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:.5rem 1rem;font-size:.95rem;color:#C9D1E0;display:flex;align-items:center;gap:.5rem}
+.pills li::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--orange)}
+
+/* Íconos */
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ic-tile{width:44px;height:44px;border-radius:12px;background:var(--orange-soft);color:var(--orange-ink);display:grid;place-items:center;flex:none}
 
 /* Bloques */
-section.block{padding-block:clamp(5rem,12vw,10rem)}
+section.block{padding-block:clamp(3rem,7vw,5.5rem)}
 .statement{font-size:clamp(2rem,4.6vw,3.6rem);max-width:20ch;font-weight:500;letter-spacing:-.035em;line-height:1.1}
 .statement .dim{color:var(--orange)}
-.head{display:grid;gap:1.2rem;margin-bottom:clamp(3rem,6vw,5rem)}
-.head h2{font-size:clamp(2rem,4.2vw,3.2rem);max-width:18ch}
+.head{display:grid;gap:1.1rem;justify-items:center;text-align:center;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.head h2{font-size:clamp(2rem,4.2vw,3.4rem);max-width:22ch}
+.head .aside{max-width:54ch;font-size:clamp(1.02rem,1.3vw,1.15rem)}
+.contact .head{justify-items:start;text-align:left}
+.contact .head h2{max-width:16ch}
+
+/* Herramientas que ya usan */
+.tools{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
+.tools li{display:flex;align-items:center;gap:.55rem;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem .5rem .55rem;font-size:.95rem;font-weight:500}
+.tools li i{width:26px;height:26px;border-radius:999px;background:var(--c);color:#fff;display:grid;place-items:center;font:600 .72rem var(--font);font-style:normal}
+.tools li.more{padding-left:1rem;color:var(--muted);font-weight:400;border-style:dashed}
+
+/* Ritmo de fondos: claro, blanco y oscuro alternados */
+.tone-white{background:var(--surface)}
+.tone-white input,.tone-white select,.tone-white textarea{background:var(--bg)}
+.tone-dark{background:radial-gradient(circle at 10% 0%,rgba(243,128,32,.16),transparent 40%),var(--ink);color:#fff}
+.tone-dark .label{color:var(--orange)}
+.tone-dark .muted,.tone-dark p{color:#AEB8CC}
 
 /* Servicios */
 .services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,6vw,6rem);border-top:1px solid var(--line)}
-.svc{display:grid;gap:.7rem;align-content:start;padding-block:2rem;border-bottom:1px solid var(--line)}
+.svc{display:grid;gap:.8rem;align-content:start;padding-block:2rem;border-bottom:1px solid var(--line)}
 .svc h3{font-size:clamp(1.4rem,2.3vw,1.8rem);letter-spacing:-.03em}
 .svc p{color:var(--muted);max-width:42ch}
-.svc.feature{grid-column:1/-1;grid-template-columns:1fr 1.3fr;gap:2rem;align-items:baseline;padding-block:2.6rem}
+.svc .ic-tile{transition:transform .4s var(--ease),background .4s var(--ease)}
+.svc:hover .ic-tile{transform:translateY(-3px) rotate(-6deg)}
+.svc.feature{grid-column:1/-1;grid-template-columns:1fr 1.3fr;gap:2rem;align-items:center;padding-block:2.6rem}
+.svc.feature .ttl{display:flex;align-items:center;gap:1rem}
+.svc.feature .ic-tile{width:56px;height:56px;border-radius:14px;background:var(--orange);color:var(--ink)}
+.svc.feature .ic{width:28px;height:28px}
 .svc.feature h3{font-size:clamp(1.9rem,3.6vw,2.8rem);color:var(--blue)}
 .svc.feature p{font-size:1.15rem;max-width:48ch}
+@media (min-width:1200px){.services{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:760px){.services{grid-template-columns:1fr}.svc.feature{grid-template-columns:1fr;gap:.8rem}}
 
 /* Tecnología */
-.stack{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.stack li{display:grid;gap:.4rem;place-content:center;justify-items:center;text-align:center;min-height:170px;padding:1.5rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .4s var(--ease)}
-.stack .brand{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;letter-spacing:-.03em;color:var(--muted);transition:color .4s var(--ease)}
-.stack .role{font-size:.85rem;color:var(--muted)}
-.stack li:hover{background:var(--surface)}
-.stack li:hover .brand{color:var(--orange-ink)}
-@media (max-width:640px){.stack{grid-template-columns:repeat(2,minmax(0,1fr))}.stack li{min-height:130px}}
+.stack{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.stack li{position:relative;overflow:hidden;display:grid;gap:.35rem;justify-items:center;text-align:center;padding:2rem 1.2rem 1.6rem;background:var(--surface);border:1px solid var(--line);border-radius:18px;transition:border-color .4s var(--ease),box-shadow .4s var(--ease),opacity 1s var(--ease) var(--d,0s),transform 1s var(--ease) var(--d,0s)}
+.stack li::after{content:"";position:absolute;inset:auto 0 0;height:3px;background:var(--c);transform:scaleX(0);transition:transform .5s var(--ease)}
+.stack .mark{width:64px;height:64px;object-fit:contain;margin-bottom:.6rem;transition:transform .5s var(--ease)}
+.stack .brand{font-size:1.25rem;font-weight:600;letter-spacing:-.02em}
+.stack .role{font-size:.88rem;color:var(--muted)}
+.stack li:hover{border-color:transparent;box-shadow:0 18px 40px -18px rgba(11,27,58,.25)}
+.stack li:hover::after{transform:scaleX(1)}
+.stack li:hover .mark{transform:translateY(-3px) scale(1.06)}
+@media (min-width:1200px){.stack{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:640px){.stack{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}}
 
 /* Impacto: diagrama empleado antes / después */
 .impact{--node-bg:var(--surface);--node-ink:var(--ink);--node-bd:var(--line);--wire:#B8C0CE;--res-bg:#E6E9EF;--res-ink:var(--muted);--core-bg:#E6E9EF;--core-ink:var(--ink)}
 .impact[data-state="after"]{--node-bg:var(--orange-soft);--node-ink:var(--orange-ink);--node-bd:transparent;--wire:var(--orange);--res-bg:var(--orange);--res-ink:var(--ink);--core-bg:var(--ink);--core-ink:#FFFFFF}
-.switch{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.switch{display:inline-flex;max-width:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
 .switch button{font:500 .95rem var(--font);border:0;background:transparent;color:var(--muted);padding:.65rem 1.2rem;border-radius:999px;cursor:pointer;transition:background .4s var(--ease),color .4s}
 .switch button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .impact[data-state="after"] .switch button[aria-pressed="true"]{background:var(--orange);color:var(--ink)}
-.diagram{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr);gap:clamp(3rem,9vw,8rem);align-items:center}
+.diagram{position:relative;max-width:1320px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr);gap:clamp(3rem,9vw,8rem);align-items:center}
 .diagram svg.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .diagram svg path{fill:none;stroke:var(--wire);stroke-width:2;transition:stroke .6s var(--ease)}
 .col{display:grid;gap:14px;position:relative;z-index:1;min-width:0}
@@ -111,30 +180,39 @@ section.block{padding-block:clamp(5rem,12vw,10rem)}
 .core{justify-self:center;background:var(--core-bg);color:var(--core-ink);border-radius:999px;padding:1.1rem 2.4rem;font-weight:500;font-size:1.1rem;position:relative;z-index:1;transition:background .6s var(--ease),color .6s}
 .node .t,.core .t{display:inline-block;transition:opacity .35s var(--ease),transform .35s var(--ease)}
 .swapping .node .t,.swapping .core .t{opacity:0;transform:translateY(6px)}
-.impact .caption{margin-top:clamp(2.5rem,5vw,4rem);color:var(--muted);max-width:52ch;font-size:1.1rem;transition:opacity .35s}
+.impact .caption{margin:clamp(1.8rem,3.5vw,2.5rem) auto 0;text-align:center;color:var(--muted);max-width:52ch;font-size:1.1rem;transition:opacity .35s}
 .swapping .caption{opacity:0}
 @media (max-width:860px){
   .diagram{grid-template-columns:1fr;gap:1.6rem;justify-items:stretch}
   .diagram svg.wires{display:none}
   .col{padding-left:1.2rem;border-left:2px solid var(--wire);transition:border-color .6s}
   .core{justify-self:start}
+  .impact .caption{text-align:left;margin-left:0}
   .col.res{order:3}
 }
 
 /* Áreas */
 .areas{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.areas li{display:grid;grid-template-columns:1fr 1.3fr;gap:2rem;padding-block:1.8rem;border-bottom:1px solid var(--line);align-items:baseline}
-.areas h3{font-size:clamp(1.5rem,2.6vw,2rem)}
+.areas li{display:grid;grid-template-columns:1fr 1.3fr;gap:2rem;padding-block:1.6rem;border-bottom:1px solid var(--line);align-items:center;transition:background .4s var(--ease),opacity 1s var(--ease) var(--d,0s),transform 1s var(--ease) var(--d,0s)}
+.areas li:hover{background:var(--surface)}
+.areas h3{font-size:clamp(1.5rem,2.6vw,2rem);display:flex;align-items:center;gap:1rem}
 .areas p{color:var(--muted)}
 @media (max-width:720px){.areas li{grid-template-columns:1fr;gap:.5rem}}
 
 /* Proceso */
 .process{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.5rem}
-.process li{display:grid;gap:.7rem;align-content:start;border-top:2px solid var(--orange);padding-top:1.2rem}
-.process .n{font-size:.85rem;color:var(--orange-ink);font-weight:500}
+.process li{display:grid;gap:.7rem;align-content:start;position:relative}
+.process li::before{content:"";position:absolute;top:23px;left:58px;right:-2rem;height:2px;background:linear-gradient(90deg,var(--orange),var(--line))}
+.process li:last-child::before{display:none}
+.process .n{width:46px;height:46px;border-radius:999px;display:grid;place-items:center;background:var(--orange);color:var(--ink);font-weight:600;font-size:.95rem;margin-bottom:.5rem}
+.process li:first-child .n{background:var(--ink);color:#fff}
+.tone-dark .process li:first-child .n{background:#fff;color:var(--ink)}
+.tone-dark .process li::before{background:linear-gradient(90deg,var(--orange),rgba(255,255,255,.14))}
+.tone-dark .process h3{color:#fff}
+.tone-dark .process p{color:#AEB8CC}
 .process h3{font-size:1.4rem;letter-spacing:-.02em}
 .process p{color:var(--muted);font-size:1rem}
-@media (max-width:900px){.process{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){.process{grid-template-columns:1fr 1fr}.process li::before{display:none}}
 @media (max-width:540px){.process{grid-template-columns:1fr}}
 
 /* Contacto */
@@ -150,14 +228,29 @@ textarea{min-height:120px;resize:vertical}
 @media (max-width:540px){.two{grid-template-columns:1fr}}
 .err{color:#B42318;font-size:.9rem}
 .sent{background:var(--surface);border-radius:16px;padding:1.6rem;display:grid;gap:1rem}
-.sent pre{white-space:pre-wrap;font:inherit;font-size:.92rem;background:var(--bg);border-radius:10px;padding:1rem;margin:0;color:var(--ink)}
-.actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.sent{border:1px solid var(--line)}
+.sent .ok{width:48px;height:48px;border-radius:999px;background:var(--orange);display:grid;place-items:center}
+.sent .ok svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
 footer{padding-block:3rem;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
 </style>
 </head>
 <body style="margin:0">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 4.5 13.5H11l-1 8 8.5-11H12l1-8z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 3.5l1.8 5.2 5.2 1.8-5.2 1.8L11 17.5l-1.8-5.2L4 10.5l5.2-1.8z"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8.5 21h7M12 17v4"/><path d="M7 13l3-3 3 2 4-4.5"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="5.5" y="4.5" width="13" height="16.5" rx="2"/><path d="M9 3h6v3H9z"/><path d="M9 11.5h6M9 15.5h4"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 7.5h7"/><path d="M8.5 12h1M14.5 12h1M8.5 16.5h1M14.5 16.5h1"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.5 7.5 12 3.5l8.5 4-8.5 4z"/><path d="M3.5 7.5v9l8.5 4 8.5-4v-9"/><path d="M12 11.5v9"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.1c2.9.4 5 2.8 5 5.9"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9.5L4 20.5z"/><path d="M8 9.5h8M8 12.5h5"/></symbol>
+</svg>
 
 <header class="nav">
   <div class="wrap">
@@ -174,30 +267,63 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
 <main id="inicio">
   <section class="hero">
     <div class="wrap">
-      <h1 class="split">Automatizamos el trabajo <span class="accent">repetitivo</span> de tu empresa.</h1>
-      <p class="fade">Modernizamos los procesos de tu empresa para que funcionen con menos pasos, menos errores y menos trabajo manual.</p>
-      <div class="ctas fade">
-        <a class="btn" href="#contacto">Pedir diagnóstico gratis</a>
-        <a class="btn ghost" href="#servicios">Ver servicios</a>
+      <div>
+        <h1 class="split">Automatizamos el trabajo <span class="accent">repetitivo</span> de tu empresa.</h1>
+        <p class="fade">Modernizamos los procesos de tu empresa para que funcionen con menos pasos, menos errores y menos trabajo manual.</p>
+        <div class="ctas fade">
+          <a class="btn" href="#contacto">Pedir diagnóstico gratis</a>
+          <a class="btn ghost" href="#servicios">Ver servicios</a>
+        </div>
+      </div>
+
+      <div class="flow" id="flow" role="img" aria-label="Ejemplo: un pedido que llega por WhatsApp se carga solo en el sistema, se descuenta el stock y se confirma al cliente.">
+        <div class="fcard" data-s="1">
+          <div class="fhead"><span class="wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/></svg></span>WhatsApp · Ferretería López<span class="time">09:41</span></div>
+          <p class="bubble">¡Hola! Necesito 20 cajas de tornillos de 8 mm para el jueves.</p>
+        </div>
+        <div class="fline" data-s="2"></div>
+        <div class="fcard" data-s="3">
+          <div class="fhead"><span class="chip">Agente IA</span>Pedido detectado</div>
+          <dl class="kv">
+            <div><dt>Cliente</dt><dd>Ferretería López</dd></div>
+            <div><dt>Producto</dt><dd>Tornillos 8 mm × 20</dd></div>
+            <div><dt>Entrega</dt><dd>Jueves</dd></div>
+          </dl>
+        </div>
+        <div class="fline" data-s="4"></div>
+        <div class="fcard" data-s="5">
+          <ul class="checks">
+            <li>Pedido cargado en el sistema</li>
+            <li>Stock descontado</li>
+            <li>Confirmación enviada al cliente</li>
+          </ul>
+          <div class="done"><span>Sin intervención manual</span><b>Listo</b></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="block" style="padding-top:0">
+  <section class="band">
     <div class="wrap">
       <p class="statement split">Que tu equipo vuelva a ocuparse <span class="dim">de lo importante.</span></p>
+      <ul class="pills fade">
+        <li>Menos pasos</li>
+        <li>Menos errores</li>
+        <li>Menos trabajo manual</li>
+        <li>Más tiempo para tus clientes</li>
+      </ul>
     </div>
   </section>
 
-  <section class="block impact" id="impacto" data-state="before" style="padding-top:0">
+  <section class="block impact" id="impacto" data-state="before">
     <div class="wrap">
-      <div class="head" style="margin-bottom:2rem">
+      <div class="head">
         <span class="label fade">El impacto</span>
         <h2 class="split">El mismo empleado, dos empresas distintas.</h2>
-      </div>
-      <div class="switch fade" role="group" aria-label="Comparar escenarios">
-        <button type="button" id="swBefore" aria-pressed="true">Sin automatizar</button>
-        <button type="button" id="swAfter" aria-pressed="false">Con procesos automatizados</button>
+        <div class="aside switch fade" role="group" aria-label="Comparar escenarios">
+          <button type="button" id="swBefore" aria-pressed="true">Sin automatizar</button>
+          <button type="button" id="swAfter" aria-pressed="false">Con procesos automatizados</button>
+        </div>
       </div>
       <div class="diagram" id="diagram">
         <svg class="wires" id="wires" aria-hidden="true"></svg>
@@ -219,23 +345,24 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
     </div>
   </section>
 
-  <section class="block" id="servicios" style="padding-top:0">
+  <section class="block tone-white" id="servicios">
     <div class="wrap">
       <div class="head">
         <span class="label fade">Servicios</span>
         <h2 class="split">Qué hacemos.</h2>
+        <p class="aside muted fade">Desde ordenar la información hasta sistemas a medida y agentes de inteligencia artificial: armamos lo que tu empresa necesita para trabajar con menos esfuerzo.</p>
       </div>
       <div class="services">
         <article class="svc feature fade">
-          <h3>Modernización de procesos</h3>
+          <div class="ttl"><span class="ic-tile"><svg class="ic"><use href="#i-cycle"/></svg></span><h3>Modernización de procesos</h3></div>
           <p>Revisamos cómo se hacen hoy las cosas en tu empresa y rediseñamos los procesos que quedaron viejos. El objetivo es que sean más ágiles y eficientes, con menos pasos y menos errores, más allá de automatizarlos.</p>
         </article>
-        <article class="svc fade"><h3>Bases de datos</h3><p>Centralizamos la información de la empresa en un solo lugar, ordenada y actualizada.</p></article>
-        <article class="svc fade"><h3>Automatización de procesos</h3><p>Hacemos que las tareas repetitivas se ejecuten solas: carga de datos, movimientos entre sistemas, avisos y reportes.</p></article>
-        <article class="svc fade"><h3>Agentes de inteligencia artificial</h3><p>Desarrollamos asistentes que leen documentos, interpretan mensajes y cargan la información donde corresponde.</p></article>
-        <article class="svc fade"><h3>Sistemas de gestión a medida</h3><p>Construimos herramientas internas adaptadas a cómo trabaja tu empresa: stock, pedidos, clientes o RRHH.</p></article>
-        <article class="svc fade"><h3>Paneles y pantallas</h3><p>Diseñamos interfaces simples para que tu equipo use todo desde un solo lugar.</p></article>
-        <article class="svc fade"><h3>Soporte y evolución</h3><p>Acompañamos el sistema después de la entrega: lo monitoreamos, lo ajustamos y lo hacemos crecer con la empresa.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-db"/></svg></span><h3>Bases de datos</h3><p>Centralizamos la información de la empresa en un solo lugar, ordenada y actualizada.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-bolt"/></svg></span><h3>Automatización de procesos</h3><p>Hacemos que las tareas repetitivas se ejecuten solas: carga de datos, movimientos entre sistemas, avisos y reportes.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-spark"/></svg></span><h3>Agentes de inteligencia artificial</h3><p>Desarrollamos asistentes que leen documentos, interpretan mensajes y cargan la información donde corresponde.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-grid"/></svg></span><h3>Sistemas de gestión a medida</h3><p>Construimos herramientas internas adaptadas a cómo trabaja tu empresa: stock, pedidos, clientes o RRHH.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-chart"/></svg></span><h3>Paneles y pantallas</h3><p>Diseñamos interfaces simples para que tu equipo use todo desde un solo lugar.</p></article>
+        <article class="svc fade"><span class="ic-tile"><svg class="ic"><use href="#i-pulse"/></svg></span><h3>Soporte y evolución</h3><p>Acompañamos el sistema después de la entrega: lo monitoreamos, lo ajustamos y lo hacemos crecer con la empresa.</p></article>
       </div>
     </div>
   </section>
@@ -245,23 +372,31 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
       <div class="head">
         <span class="label fade">Qué automatizamos</span>
         <h2 class="split">Trabajamos con lo que ya usás.</h2>
-        <p class="muted fade" style="max-width:44ch">Excel, WhatsApp, Tango, Xubio u otro sistema de gestión. No hace falta cambiar de herramientas.</p>
+        <p class="aside muted fade">No hace falta cambiar de herramientas: conectamos y automatizamos las que tu equipo ya usa todos los días.</p>
+        <ul class="tools fade">
+          <li><i style="--c:#1D6F42">X</i>Excel</li>
+          <li><i style="--c:#25D366">W</i>WhatsApp</li>
+          <li><i style="--c:#E30613">T</i>Tango</li>
+          <li><i style="--c:#2B6CF6">X</i>Xubio</li>
+          <li class="more">u otro sistema de gestión</li>
+        </ul>
       </div>
       <ul class="areas">
-        <li class="fade"><h3>Administración</h3><p>Pedidos, presupuestos, cobranzas y reportes que se arman solos.</p></li>
-        <li class="fade"><h3>Contabilidad</h3><p>Carga de comprobantes, conciliaciones y cuentas corrientes.</p></li>
-        <li class="fade"><h3>Stock</h3><p>Movimientos, arribos de mercadería y alertas de reposición.</p></li>
-        <li class="fade"><h3>Recursos humanos</h3><p>Asistencia, licencias y novedades para liquidar sueldos.</p></li>
-        <li class="fade"><h3>Atención al cliente</h3><p>Un asistente en WhatsApp que responde, toma pedidos y deriva cuando hace falta.</p></li>
+        <li class="fade"><h3><span class="ic-tile"><svg class="ic"><use href="#i-clip"/></svg></span>Administración</h3><p>Pedidos, presupuestos, cobranzas y reportes que se arman solos.</p></li>
+        <li class="fade"><h3><span class="ic-tile"><svg class="ic"><use href="#i-calc"/></svg></span>Contabilidad</h3><p>Carga de comprobantes, conciliaciones y cuentas corrientes.</p></li>
+        <li class="fade"><h3><span class="ic-tile"><svg class="ic"><use href="#i-box"/></svg></span>Stock</h3><p>Movimientos, arribos de mercadería y alertas de reposición.</p></li>
+        <li class="fade"><h3><span class="ic-tile"><svg class="ic"><use href="#i-team"/></svg></span>Recursos humanos</h3><p>Asistencia, licencias y novedades para liquidar sueldos.</p></li>
+        <li class="fade"><h3><span class="ic-tile"><svg class="ic"><use href="#i-chat"/></svg></span>Atención al cliente</h3><p>Un asistente en WhatsApp que responde, toma pedidos y deriva cuando hace falta.</p></li>
       </ul>
     </div>
   </section>
 
-  <section class="block" id="proceso">
+  <section class="block tone-dark" id="proceso">
     <div class="wrap">
       <div class="head">
         <span class="label fade">Proceso</span>
         <h2 class="split">De la primera charla al sistema funcionando.</h2>
+        <p class="aside fade">Un camino claro y por etapas: sabés qué vas a recibir, cuánto cuesta y en cuánto tiempo lo recuperás.</p>
       </div>
       <ol class="process">
         <li class="fade"><span class="n">01</span><h3>Diagnóstico gratis</h3><p>Relevamos dos o tres procesos y calculamos cuánto te cuesta hoy hacerlos a mano.</p></li>
@@ -272,24 +407,25 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
     </div>
   </section>
 
-  <section class="block" id="tecnologia" style="padding-top:0">
+  <section class="block" id="tecnologia">
     <div class="wrap">
       <div class="head">
         <span class="label fade">Tecnología</span>
         <h2 class="split">Trabajamos con herramientas de primer nivel.</h2>
+        <p class="aside muted fade">Plataformas probadas, seguras y escalables, para que lo que construimos dure y crezca con tu empresa.</p>
       </div>
       <ul class="stack">
-        <li class="fade"><span class="brand">Cloudflare</span><span class="role">Infraestructura y seguridad</span></li>
-        <li class="fade"><span class="brand">Supabase</span><span class="role">Bases de datos</span></li>
-        <li class="fade"><span class="brand">n8n</span><span class="role">Automatización</span></li>
-        <li class="fade"><span class="brand">Claude</span><span class="role">Inteligencia artificial</span></li>
-        <li class="fade"><span class="brand">Meta</span><span class="role">WhatsApp e Instagram</span></li>
-        <li class="fade"><span class="brand">Groq</span><span class="role">IA de respuesta rápida</span></li>
+        <li class="fade" style="--c:#F38020"><img class="mark" src="logos/cloudflare.png" alt="" width="64" height="64" loading="lazy"><span class="brand">Cloudflare</span><span class="role">Infraestructura y seguridad</span></li>
+        <li class="fade" style="--c:#3ECF8E"><img class="mark" src="logos/supabase.png" alt="" width="64" height="64" loading="lazy"><span class="brand">Supabase</span><span class="role">Bases de datos</span></li>
+        <li class="fade" style="--c:#EA4B71"><img class="mark" src="logos/n8n.png" alt="" width="64" height="64" loading="lazy"><span class="brand">n8n</span><span class="role">Automatización</span></li>
+        <li class="fade" style="--c:#D97757"><img class="mark" src="logos/claude.png" alt="" width="64" height="64" loading="lazy"><span class="brand">Claude</span><span class="role">Inteligencia artificial</span></li>
+        <li class="fade" style="--c:#0467DF"><img class="mark" src="logos/meta.png" alt="" width="64" height="64" loading="lazy"><span class="brand">Meta</span><span class="role">WhatsApp e Instagram</span></li>
+        <li class="fade" style="--c:#F55036"><img class="mark" src="logos/groq.png" alt="" width="64" height="64" loading="lazy"><span class="brand">Groq</span><span class="role">IA de respuesta rápida</span></li>
       </ul>
     </div>
   </section>
 
-  <section class="block" id="contacto">
+  <section class="block tone-white" id="contacto">
     <div class="wrap contact">
       <div class="head" style="margin:0">
         <span class="label fade">Contacto</span>
@@ -317,16 +453,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
           <div><button class="btn" type="submit" id="sendBtn">Pedir diagnóstico gratis</button></div>
         </form>
 
-        <div class="sent" id="sent" hidden>
-          <h3 style="font-size:1.4rem;letter-spacing:-.02em">Último paso</h3>
-          <p class="muted">Abrí WhatsApp con tu mensaje listo para enviar. Si no se abre, copialo y mandalo al <b id="numShow"></b>.</p>
-          <pre id="msgPreview"></pre>
-          <div class="actions">
-            <a class="btn" id="waLink" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
-            <button class="btn ghost" type="button" id="copyBtn">Copiar mensaje</button>
-            <button class="btn ghost" type="button" id="editBtn">Editar</button>
-          </div>
-          <p class="muted" id="copyMsg" style="font-size:.9rem" hidden></p>
+        <div class="sent" id="sent" hidden tabindex="-1">
+          <span class="ok"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4L18 8"/></svg></span>
+          <h3 style="font-size:1.6rem;letter-spacing:-.02em" id="sentTitle">¡Gracias!</h3>
+          <p class="muted">Recibimos tu consulta. Te escribimos por WhatsApp en el día hábil para coordinar el diagnóstico gratis.</p>
         </div>
       </div>
     </div>
@@ -341,8 +471,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
 </footer>
 
 <script>
-// Número de WhatsApp de la agencia (código de país + área + número, sin espacios)
-const WA_NUMBER = "5491100000000";
+// Número de WhatsApp de la agencia, tal como se muestra en el pie
 const WA_DISPLAY = "+54 9 11 0000-0000";
 // Supabase: URL del proyecto y clave pública (anon / publishable). Nunca la service_role.
 const SUPABASE_URL = "https://xheswefuogrsezoquylt.supabase.co";
@@ -361,7 +490,6 @@ async function saveLead(){
   }catch(_){ return false; }
 }
 const $ = id => document.getElementById(id);
-$("numShow").textContent = WA_DISPLAY;
 $("footNum").textContent = WA_DISPLAY;
 
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -391,9 +519,30 @@ if (!reduce && "IntersectionObserver" in window){
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   }, { rootMargin: "0px 0px -10% 0px" });
+  // En grillas y listas, los elementos aparecen uno tras otro
+  document.querySelectorAll(".services,.areas,.stack,.process").forEach(g =>
+    [...g.children].forEach((c,i) => c.style.setProperty("--d", (i % 6) * 0.08 + "s")));
   document.querySelectorAll(".split,.fade").forEach(el => io.observe(el));
   // El hero entra apenas carga
   requestAnimationFrame(() => document.querySelectorAll(".hero .split,.hero .fade").forEach(el => el.classList.add("in")));
+}
+
+// Hero: el flujo se arma paso a paso y se repite
+const flow = $("flow");
+if (!reduce){
+  flow.classList.add("anim");
+  const steps = [...flow.querySelectorAll("[data-s]")];
+  let timer;
+  const run = () => {
+    steps.forEach(el => el.classList.remove("on"));
+    steps.forEach(el => {
+      const i = +el.dataset.s;
+      setTimeout(() => el.classList.add("on"), 400 + i * 650);
+    });
+    timer = setTimeout(run, 400 + steps.length * 650 + 4000);
+  };
+  run();
+  document.addEventListener("visibilitychange", () => { clearTimeout(timer); if (!document.hidden) run(); });
 }
 
 // Diagrama de impacto: cables calculados según la posición real de los nodos
@@ -460,15 +609,19 @@ function setScenario(s){
 $("swBefore").addEventListener("click", () => setScenario("before"));
 $("swAfter").addEventListener("click", () => setScenario("after"));
 
-// Formulario → mensaje de WhatsApp
-const form = $("leadForm");
-function buildMsg(){
-  const v = id => $(id).value.trim();
-  const lines = ["Hola, quiero pedir un diagnóstico gratis.","","Nombre: "+v("nombre"),"Empresa: "+v("empresa"),"WhatsApp: "+v("tel")];
-  if (v("empleados")) lines.push("Empleados: "+v("empleados"));
-  lines.push("","Quiero automatizar: "+v("proceso"));
-  return lines.join("\n");
+// Nav: línea al hacer scroll y sección activa
+const nav = document.querySelector("header.nav");
+addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 8), { passive: true });
+if ("IntersectionObserver" in window){
+  const links = [...nav.querySelectorAll("nav a[href^='#']")];
+  const so = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  links.forEach(a => { const t = document.querySelector(a.getAttribute("href")); if (t) so.observe(t); });
 }
+
+// Formulario → se guarda el pedido y se muestra la confirmación
+const form = $("leadForm");
 form.addEventListener("submit", async e => {
   e.preventDefault();
   if ($("website").value) return;
@@ -476,18 +629,12 @@ form.addEventListener("submit", async e => {
   if (missing.length){ $("formErr").textContent = "Completá nombre, empresa, WhatsApp y qué querés automatizar."; $("formErr").hidden = false; $(missing[0]).focus(); return; }
   $("formErr").hidden = true;
   const btn = $("sendBtn"); btn.disabled = true; btn.textContent = "Enviando…";
-  await saveLead();
+  const ok = await saveLead();
   btn.disabled = false; btn.textContent = "Pedir diagnóstico gratis";
-  const msg = buildMsg();
-  $("msgPreview").textContent = msg;
-  $("waLink").href = "https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
-  form.hidden = true; $("sent").hidden = false;
-});
-$("editBtn").addEventListener("click", () => { $("sent").hidden = true; form.hidden = false; $("copyMsg").hidden = true; $("nombre").focus(); });
-$("copyBtn").addEventListener("click", () => {
-  const out = $("copyMsg");
-  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("msgPreview")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); out.textContent = "Mensaje seleccionado. Copialo con Ctrl+C o manteniendo presionado."; out.hidden = false; };
-  try { navigator.clipboard.writeText($("msgPreview").textContent).then(() => { out.textContent = "Mensaje copiado."; out.hidden = false; }, fallback); } catch(_) { fallback(); }
+  if (!ok){ $("formErr").textContent = "No pudimos enviar tu consulta. Probá de nuevo en unos minutos."; $("formErr").hidden = false; return; }
+  const nombre = $("nombre").value.trim().split(/\s+/)[0];
+  $("sentTitle").textContent = "¡Gracias, " + nombre + "!";
+  form.hidden = true; $("sent").hidden = false; $("sent").focus();
 });
 </script>
 
