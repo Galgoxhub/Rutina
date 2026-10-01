@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Modernizamos y automatizamos los procesos de tu empresa para que funcionen con menos pasos, menos errores y menos trabajo manual.">
+<meta property="og:title" content="Rutina — Automatización para PyMEs">
+<meta property="og:description" content="Que tu equipo vuelva a ocuparse de lo importante.">
+<meta name="theme-color" content="#F6F7F9">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B1B3A'/%3E%3Ccircle cx='44' cy='44' r='8' fill='%23F38020'/%3E%3C/svg%3E">
+<title>Rutina — Automatización para PyMEs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&display=swap">
+<style>
+/* Layout: una columna con mucho aire, una idea por pantalla. Momento distintivo: el diagrama del empleado antes y después. Dirección única clara (azul). */
+:root{
+  --bg:#F6F7F9;
+  --surface:#FFFFFF;
+  --ink:#0B1B3A;
+  --muted:#5E6A82;
+  --line:#E1E5EC;
+  --blue:#E8690C;
+  --blue-soft:#FEF0E4;
+  --orange:#F38020;
+  --orange-soft:#FEF0E4;
+  --orange-ink:#B9520A;
+  --font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:clamp(20px,6vw,120px)}
+a{color:var(--orange-ink)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.04em;line-height:1.04;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--muted)}
+.label{font-size:.85rem;color:var(--orange-ink);letter-spacing:.02em;font-weight:500;display:inline-flex;align-items:center;gap:.5rem}
+.label::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--orange)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--orange);color:var(--ink);border:0;border-radius:10px;padding:1rem 1.6rem;font:500 1rem var(--font);text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),background .3s}
+.btn:hover{background:var(--blue);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--ink);background:transparent}
+
+/* Revelado de palabras: el estado de reposo es visible; la animación parte de un tenue gris */
+.split .w{display:inline-block;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.js .split:not(.in) .w{opacity:.12;transform:translateY(.35em)}
+.fade{transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.js .fade:not(.in){opacity:.15;transform:translateY(24px)}
+@media (prefers-reduced-motion:reduce){.split .w,.fade{transition:none!important;opacity:1!important;transform:none!important}html{scroll-behavior:auto}}
+
+/* Nav */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:1.4rem}
+.logo{font-weight:600;font-size:1.25rem;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+.nav nav{display:flex;gap:2rem;align-items:center;font-size:.95rem}
+.nav nav a{color:var(--muted);text-decoration:none;transition:color .2s}
+.nav nav a:hover{color:var(--ink)}
+.nav nav a.cta{color:var(--orange-ink);font-weight:500}
+@media (max-width:720px){.nav nav a:not(.cta){display:none}}
+
+/* Hero */
+.hero{padding-block:clamp(5rem,14vw,11rem) clamp(5rem,12vw,9rem)}
+.hero h1{font-size:clamp(2.8rem,7.2vw,5.6rem);max-width:15ch}
+.hero h1 .accent{color:var(--blue)}
+.hero p{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--muted);max-width:34ch;margin-top:2.2rem}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2.8rem}
+
+/* Bloques */
+section.block{padding-block:clamp(5rem,12vw,10rem)}
+.statement{font-size:clamp(2rem,4.6vw,3.6rem);max-width:20ch;font-weight:500;letter-spacing:-.035em;line-height:1.1}
+.statement .dim{color:var(--orange)}
+.head{display:grid;gap:1.2rem;margin-bottom:clamp(3rem,6vw,5rem)}
+.head h2{font-size:clamp(2rem,4.2vw,3.2rem);max-width:18ch}
+
+/* Servicios */
+.services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,6vw,6rem);border-top:1px solid var(--line)}
+.svc{display:grid;gap:.7rem;align-content:start;padding-block:2rem;border-bottom:1px solid var(--line)}
+.svc h3{font-size:clamp(1.4rem,2.3vw,1.8rem);letter-spacing:-.03em}
+.svc p{color:var(--muted);max-width:42ch}
+.svc.feature{grid-column:1/-1;grid-template-columns:1fr 1.3fr;gap:2rem;align-items:baseline;padding-block:2.6rem}
+.svc.feature h3{font-size:clamp(1.9rem,3.6vw,2.8rem);color:var(--blue)}
+.svc.feature p{font-size:1.15rem;max-width:48ch}
+@media (max-width:760px){.services{grid-template-columns:1fr}.svc.feature{grid-template-columns:1fr;gap:.8rem}}
+
+/* Tecnología */
+.stack{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.stack li{display:grid;gap:.4rem;place-content:center;justify-items:center;text-align:center;min-height:170px;padding:1.5rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .4s var(--ease)}
+.stack .brand{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;letter-spacing:-.03em;color:var(--muted);transition:color .4s var(--ease)}
+.stack .role{font-size:.85rem;color:var(--muted)}
+.stack li:hover{background:var(--surface)}
+.stack li:hover .brand{color:var(--orange-ink)}
+@media (max-width:640px){.stack{grid-template-columns:repeat(2,minmax(0,1fr))}.stack li{min-height:130px}}
+
+/* Impacto: diagrama empleado antes / después */
+.impact{--node-bg:var(--surface);--node-ink:var(--ink);--node-bd:var(--line);--wire:#B8C0CE;--res-bg:#E6E9EF;--res-ink:var(--muted);--core-bg:#E6E9EF;--core-ink:var(--ink)}
+.impact[data-state="after"]{--node-bg:var(--orange-soft);--node-ink:var(--orange-ink);--node-bd:transparent;--wire:var(--orange);--res-bg:var(--orange);--res-ink:var(--ink);--core-bg:var(--ink);--core-ink:#FFFFFF}
+.switch{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.switch button{font:500 .95rem var(--font);border:0;background:transparent;color:var(--muted);padding:.65rem 1.2rem;border-radius:999px;cursor:pointer;transition:background .4s var(--ease),color .4s}
+.switch button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.impact[data-state="after"] .switch button[aria-pressed="true"]{background:var(--orange);color:var(--ink)}
+.diagram{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr);gap:clamp(3rem,9vw,8rem);align-items:center}
+.diagram svg.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.diagram svg path{fill:none;stroke:var(--wire);stroke-width:2;transition:stroke .6s var(--ease)}
+.col{display:grid;gap:14px;position:relative;z-index:1;min-width:0}
+.node{background:var(--node-bg);color:var(--node-ink);border:1px solid var(--node-bd);border-radius:999px;padding:.85rem 1.2rem;text-align:center;font-size:.98rem;transition:background .6s var(--ease),color .6s var(--ease),border-color .6s}
+.col.res .node{background:var(--res-bg);color:var(--res-ink);border-color:transparent;font-weight:500}
+.core{justify-self:center;background:var(--core-bg);color:var(--core-ink);border-radius:999px;padding:1.1rem 2.4rem;font-weight:500;font-size:1.1rem;position:relative;z-index:1;transition:background .6s var(--ease),color .6s}
+.node .t,.core .t{display:inline-block;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.swapping .node .t,.swapping .core .t{opacity:0;transform:translateY(6px)}
+.impact .caption{margin-top:clamp(2.5rem,5vw,4rem);color:var(--muted);max-width:52ch;font-size:1.1rem;transition:opacity .35s}
+.swapping .caption{opacity:0}
+@media (max-width:860px){
+  .diagram{grid-template-columns:1fr;gap:1.6rem;justify-items:stretch}
+  .diagram svg.wires{display:none}
+  .col{padding-left:1.2rem;border-left:2px solid var(--wire);transition:border-color .6s}
+  .core{justify-self:start}
+  .col.res{order:3}
+}
+
+/* Áreas */
+.areas{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.areas li{display:grid;grid-template-columns:1fr 1.3fr;gap:2rem;padding-block:1.8rem;border-bottom:1px solid var(--line);align-items:baseline}
+.areas h3{font-size:clamp(1.5rem,2.6vw,2rem)}
+.areas p{color:var(--muted)}
+@media (max-width:720px){.areas li{grid-template-columns:1fr;gap:.5rem}}
+
+/* Proceso */
+.process{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.5rem}
+.process li{display:grid;gap:.7rem;align-content:start;border-top:2px solid var(--orange);padding-top:1.2rem}
+.process .n{font-size:.85rem;color:var(--orange-ink);font-weight:500}
+.process h3{font-size:1.4rem;letter-spacing:-.02em}
+.process p{color:var(--muted);font-size:1rem}
+@media (max-width:900px){.process{grid-template-columns:1fr 1fr}}
+@media (max-width:540px){.process{grid-template-columns:1fr}}
+
+/* Contacto */
+.contact{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(2rem,6vw,6rem);align-items:start}
+@media (max-width:860px){.contact{grid-template-columns:1fr}}
+form{display:grid;gap:1.1rem}
+.field{display:grid;gap:.4rem}
+.field label{font-size:.9rem;font-weight:500}
+input,select,textarea{width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--orange)}
+textarea{min-height:120px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:540px){.two{grid-template-columns:1fr}}
+.err{color:#B42318;font-size:.9rem}
+.sent{background:var(--surface);border-radius:16px;padding:1.6rem;display:grid;gap:1rem}
+.sent pre{white-space:pre-wrap;font:inherit;font-size:.92rem;background:var(--bg);border-radius:10px;padding:1rem;margin:0;color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:.7rem}
+
+footer{padding-block:3rem;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+</style>
+</head>
+<body style="margin:0">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#inicio">Rutina<span style="color:var(--orange)">.</span></a>
+    <nav>
+      <a href="#servicios">Servicios</a>
+      <a href="#que-automatizamos">Qué automatizamos</a>
+      <a href="#proceso">Proceso</a>
+      <a class="cta" href="#contacto">Contacto →</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="split">Automatizamos el trabajo <span class="accent">repetitivo</span> de tu empresa.</h1>
+      <p class="fade">Modernizamos los procesos de tu empresa para que funcionen con menos pasos, menos errores y menos trabajo manual.</p>
+      <div class="ctas fade">
+        <a class="btn" href="#contacto">Pedir diagnóstico gratis</a>
+        <a class="btn ghost" href="#servicios">Ver servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <p class="statement split">Que tu equipo vuelva a ocuparse <span class="dim">de lo importante.</span></p>
+    </div>
+  </section>
+
+  <section class="block impact" id="impacto" data-state="before" style="padding-top:0">
+    <div class="wrap">
+      <div class="head" style="margin-bottom:2rem">
+        <span class="label fade">El impacto</span>
+        <h2 class="split">El mismo empleado, dos empresas distintas.</h2>
+      </div>
+      <div class="switch fade" role="group" aria-label="Comparar escenarios">
+        <button type="button" id="swBefore" aria-pressed="true">Sin automatizar</button>
+        <button type="button" id="swAfter" aria-pressed="false">Con procesos automatizados</button>
+      </div>
+      <div class="diagram" id="diagram">
+        <svg class="wires" id="wires" aria-hidden="true"></svg>
+        <div class="col causes">
+          <div class="node"><span class="t" data-before="Tareas recurrentes" data-after="Tareas que se hacen solas">Tareas recurrentes</span></div>
+          <div class="node"><span class="t" data-before="Mala gestión de archivos" data-after="Archivos centralizados">Mala gestión de archivos</span></div>
+          <div class="node"><span class="t" data-before="Múltiples programas por proceso" data-after="Un sistema conectado">Múltiples programas por proceso</span></div>
+          <div class="node"><span class="t" data-before="Datos desorganizados" data-after="Datos ordenados y al día">Datos desorganizados</span></div>
+          <div class="node"><span class="t" data-before="Procesos manuales" data-after="Flujos automatizados">Procesos manuales</span></div>
+        </div>
+        <div class="core" id="core"><span class="t">Empleado</span></div>
+        <div class="col res">
+          <div class="node"><span class="t" data-before="Pérdida de eficiencia" data-after="Más eficiencia">Pérdida de eficiencia</span></div>
+          <div class="node"><span class="t" data-before="Tiempo perdido" data-after="Tiempo para lo importante">Tiempo perdido</span></div>
+          <div class="node"><span class="t" data-before="Resultados pobres" data-after="Mejores resultados">Resultados pobres</span></div>
+        </div>
+      </div>
+      <p class="caption" id="caption" data-before="Hoy el empleado está en el medio de todo: copia, busca, carga y controla. Su tiempo se va en tareas que no generan valor." data-after="Con los procesos automatizados, el sistema hace el trabajo repetitivo. El empleado revisa, decide y atiende a los clientes.">Hoy el empleado está en el medio de todo: copia, busca, carga y controla. Su tiempo se va en tareas que no generan valor.</p>
+    </div>
+  </section>
+
+  <section class="block" id="servicios" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <span class="label fade">Servicios</span>
+        <h2 class="split">Qué hacemos.</h2>
+      </div>
+      <div class="services">
+        <article class="svc feature fade">
+          <h3>Modernización de procesos</h3>
+          <p>Revisamos cómo se hacen hoy las cosas en tu empresa y rediseñamos los procesos que quedaron viejos. El objetivo es que sean más ágiles y eficientes, con menos pasos y menos errores, más allá de automatizarlos.</p>
+        </article>
+        <article class="svc fade"><h3>Bases de datos</h3><p>Centralizamos la información de la empresa en un solo lugar, ordenada y actualizada.</p></article>
+        <article class="svc fade"><h3>Automatización de procesos</h3><p>Hacemos que las tareas repetitivas se ejecuten solas: carga de datos, movimientos entre sistemas, avisos y reportes.</p></article>
+        <article class="svc fade"><h3>Agentes de inteligencia artificial</h3><p>Desarrollamos asistentes que leen documentos, interpretan mensajes y cargan la información donde corresponde.</p></article>
+        <article class="svc fade"><h3>Sistemas de gestión a medida</h3><p>Construimos herramientas internas adaptadas a cómo trabaja tu empresa: stock, pedidos, clientes o RRHH.</p></article>
+        <article class="svc fade"><h3>Paneles y pantallas</h3><p>Diseñamos interfaces simples para que tu equipo use todo desde un solo lugar.</p></article>
+        <article class="svc fade"><h3>Soporte y evolución</h3><p>Acompañamos el sistema después de la entrega: lo monitoreamos, lo ajustamos y lo hacemos crecer con la empresa.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="que-automatizamos">
+    <div class="wrap">
+      <div class="head">
+        <span class="label fade">Qué automatizamos</span>
+        <h2 class="split">Trabajamos con lo que ya usás.</h2>
+        <p class="muted fade" style="max-width:44ch">Excel, WhatsApp, Tango, Xubio u otro sistema de gestión. No hace falta cambiar de herramientas.</p>
+      </div>
+      <ul class="areas">
+        <li class="fade"><h3>Administración</h3><p>Pedidos, presupuestos, cobranzas y reportes que se arman solos.</p></li>
+        <li class="fade"><h3>Contabilidad</h3><p>Carga de comprobantes, conciliaciones y cuentas corrientes.</p></li>
+        <li class="fade"><h3>Stock</h3><p>Movimientos, arribos de mercadería y alertas de reposición.</p></li>
+        <li class="fade"><h3>Recursos humanos</h3><p>Asistencia, licencias y novedades para liquidar sueldos.</p></li>
+        <li class="fade"><h3>Atención al cliente</h3><p>Un asistente en WhatsApp que responde, toma pedidos y deriva cuando hace falta.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="proceso">
+    <div class="wrap">
+      <div class="head">
+        <span class="label fade">Proceso</span>
+        <h2 class="split">De la primera charla al sistema funcionando.</h2>
+      </div>
+      <ol class="process">
+        <li class="fade"><span class="n">01</span><h3>Diagnóstico gratis</h3><p>Relevamos dos o tres procesos y calculamos cuánto te cuesta hoy hacerlos a mano.</p></li>
+        <li class="fade"><span class="n">02</span><h3>Propuesta</h3><p>Precio cerrado y en cuántos meses recuperás la inversión.</p></li>
+        <li class="fade"><span class="n">03</span><h3>Implementación</h3><p>Construimos y probamos con tus datos reales, por etapas.</p></li>
+        <li class="fade"><span class="n">04</span><h3>Mantenimiento</h3><p>Monitoreamos que todo funcione y ajustamos cuando tu negocio cambia.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="tecnologia" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <span class="label fade">Tecnología</span>
+        <h2 class="split">Trabajamos con herramientas de primer nivel.</h2>
+      </div>
+      <ul class="stack">
+        <li class="fade"><span class="brand">Cloudflare</span><span class="role">Infraestructura y seguridad</span></li>
+        <li class="fade"><span class="brand">Supabase</span><span class="role">Bases de datos</span></li>
+        <li class="fade"><span class="brand">n8n</span><span class="role">Automatización</span></li>
+        <li class="fade"><span class="brand">Claude</span><span class="role">Inteligencia artificial</span></li>
+        <li class="fade"><span class="brand">Meta</span><span class="role">WhatsApp e Instagram</span></li>
+        <li class="fade"><span class="brand">Groq</span><span class="role">IA de respuesta rápida</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="contacto">
+    <div class="wrap contact">
+      <div class="head" style="margin:0">
+        <span class="label fade">Contacto</span>
+        <h2 class="split">Contanos qué tarea te gustaría no hacer más.</h2>
+        <p class="muted fade" style="max-width:38ch">Te respondemos en el día hábil para coordinar un diagnóstico gratis de 30 minutos.</p>
+      </div>
+
+      <div class="fade">
+        <form id="leadForm" novalidate>
+          <div class="two">
+            <div class="field"><label for="nombre">Nombre</label><input type="text" id="nombre" autocomplete="name" required></div>
+            <div class="field"><label for="empresa">Empresa</label><input type="text" id="empresa" autocomplete="organization" required></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="tel">WhatsApp</label><input type="tel" id="tel" autocomplete="tel" placeholder="11 2345 6789" required></div>
+            <div class="field"><label for="empleados">Empleados</label>
+              <select id="empleados"><option value="">Elegí</option><option>1 a 5</option><option>6 a 20</option><option>21 a 50</option><option>51 a 200</option><option>Más de 200</option></select>
+            </div>
+          </div>
+          <div class="field"><label for="proceso">¿Qué te gustaría automatizar?</label>
+            <textarea id="proceso" required placeholder="Ej.: pasamos los pedidos de WhatsApp a una planilla y después a Tango."></textarea>
+          </div>
+          <p class="err" id="formErr" hidden></p>
+          <div><button class="btn" type="submit" id="sendBtn">Pedir diagnóstico gratis</button></div>
+        </form>
+
+        <div class="sent" id="sent" hidden>
+          <h3 style="font-size:1.4rem;letter-spacing:-.02em">Último paso</h3>
+          <p class="muted">Abrí WhatsApp con tu mensaje listo para enviar. Si no se abre, copialo y mandalo al <b id="numShow"></b>.</p>
+          <pre id="msgPreview"></pre>
+          <div class="actions">
+            <a class="btn" id="waLink" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+            <button class="btn ghost" type="button" id="copyBtn">Copiar mensaje</button>
+            <button class="btn ghost" type="button" id="editBtn">Editar</button>
+          </div>
+          <p class="muted" id="copyMsg" style="font-size:.9rem" hidden></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Rutina · Automatización de procesos para PyMEs · Buenos Aires</span>
+    <span>WhatsApp <span id="footNum"></span></span>
+  </div>
+</footer>
+
+<script>
+// Número de WhatsApp de la agencia (código de país + área + número, sin espacios)
+const WA_NUMBER = "5491100000000";
+const WA_DISPLAY = "+54 9 11 0000-0000";
+const $ = id => document.getElementById(id);
+$("numShow").textContent = WA_DISPLAY;
+$("footNum").textContent = WA_DISPLAY;
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Partir títulos en palabras, conservando spans internos
+function splitWords(el){
+  const walk = node => {
+    [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3){
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          const s = document.createElement("span"); s.className = "w"; s.textContent = part; frag.appendChild(s);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1) walk(n);
+    });
+  };
+  walk(el);
+  el.querySelectorAll(".w").forEach((w,i) => w.style.transitionDelay = (i*0.045)+"s");
+}
+
+if (!reduce && "IntersectionObserver" in window){
+  document.documentElement.classList.add("js");
+  document.querySelectorAll(".split").forEach(splitWords);
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -10% 0px" });
+  document.querySelectorAll(".split,.fade").forEach(el => io.observe(el));
+  // El hero entra apenas carga
+  requestAnimationFrame(() => document.querySelectorAll(".hero .split,.hero .fade").forEach(el => el.classList.add("in")));
+}
+
+// Diagrama de impacto: cables calculados según la posición real de los nodos
+const impact = $("impacto"), diagram = $("diagram"), wires = $("wires"), core = $("core");
+const NS = "http://www.w3.org/2000/svg";
+let drawn = false;
+function drawWires(){
+  if (getComputedStyle(wires).display === "none") return;
+  const box = diagram.getBoundingClientRect();
+  const c = core.getBoundingClientRect();
+  const cy = c.top + c.height/2 - box.top;
+  const cl = c.left - box.left, cr = c.right - box.left;
+  const paths = [];
+  diagram.querySelectorAll(".causes .node").forEach(n => {
+    const r = n.getBoundingClientRect();
+    const x1 = r.right - box.left, y1 = r.top + r.height/2 - box.top, mx = x1 + (cl - x1)*0.5;
+    paths.push(`M${x1},${y1} C${mx},${y1} ${mx},${cy} ${cl},${cy}`);
+  });
+  diagram.querySelectorAll(".res .node").forEach(n => {
+    const r = n.getBoundingClientRect();
+    const x2 = r.left - box.left, y2 = r.top + r.height/2 - box.top, mx = cr + (x2 - cr)*0.5;
+    paths.push(`M${cr},${cy} C${mx},${cy} ${mx},${y2} ${x2},${y2}`);
+  });
+  wires.innerHTML = "";
+  paths.forEach((d,i) => {
+    const p = document.createElementNS(NS,"path");
+    p.setAttribute("d", d);
+    wires.appendChild(p);
+    if (!drawn && !reduce && document.documentElement.classList.contains("js")){
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len; p.style.strokeDashoffset = len * 0.85;
+      p.dataset.len = len; p.dataset.i = i;
+    }
+  });
+}
+function animateWires(){
+  wires.querySelectorAll("path").forEach(p => {
+    const i = +p.dataset.i || 0;
+    p.style.transition = `stroke-dashoffset 1.1s ${0.08*i}s cubic-bezier(.2,.7,.1,1), stroke .6s`;
+    p.style.strokeDashoffset = 0;
+  });
+  drawn = true;
+}
+drawWires();
+addEventListener("resize", () => { drawWires(); if (drawn) wires.querySelectorAll("path").forEach(p => { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; }); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!drawn) drawWires(); });
+if ("IntersectionObserver" in window && !reduce){
+  const wo = new IntersectionObserver(es => { if (es[0].isIntersecting){ animateWires(); wo.disconnect(); } }, { threshold: .35 });
+  wo.observe(diagram);
+} else drawn = true;
+
+function setScenario(s){
+  if (impact.dataset.state === s) return;
+  $("swBefore").setAttribute("aria-pressed", s === "before");
+  $("swAfter").setAttribute("aria-pressed", s === "after");
+  impact.classList.add("swapping");
+  setTimeout(() => {
+    impact.dataset.state = s;
+    impact.querySelectorAll("[data-" + s + "]").forEach(el => el.textContent = el.dataset[s]);
+    impact.classList.remove("swapping");
+    drawWires();
+  }, reduce ? 0 : 320);
+}
+$("swBefore").addEventListener("click", () => setScenario("before"));
+$("swAfter").addEventListener("click", () => setScenario("after"));
+
+// Formulario → mensaje de WhatsApp
+const form = $("leadForm");
+function buildMsg(){
+  const v = id => $(id).value.trim();
+  const lines = ["Hola, quiero pedir un diagnóstico gratis.","","Nombre: "+v("nombre"),"Empresa: "+v("empresa"),"WhatsApp: "+v("tel")];
+  if (v("empleados")) lines.push("Empleados: "+v("empleados"));
+  lines.push("","Quiero automatizar: "+v("proceso"));
+  return lines.join("\n");
+}
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const missing = ["nombre","empresa","tel","proceso"].filter(id => !$(id).value.trim());
+  if (missing.length){ $("formErr").textContent = "Completá nombre, empresa, WhatsApp y qué querés automatizar."; $("formErr").hidden = false; $(missing[0]).focus(); return; }
+  $("formErr").hidden = true;
+  const msg = buildMsg();
+  $("msgPreview").textContent = msg;
+  $("waLink").href = "https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
+  form.hidden = true; $("sent").hidden = false;
+});
+$("editBtn").addEventListener("click", () => { $("sent").hidden = true; form.hidden = false; $("copyMsg").hidden = true; $("nombre").focus(); });
+$("copyBtn").addEventListener("click", () => {
+  const out = $("copyMsg");
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("msgPreview")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); out.textContent = "Mensaje seleccionado. Copialo con Ctrl+C o manteniendo presionado."; out.hidden = false; };
+  try { navigator.clipboard.writeText($("msgPreview").textContent).then(() => { out.textContent = "Mensaje copiado."; out.hidden = false; }, fallback); } catch(_) { fallback(); }
+});
+</script>
+
+</body>
+</html>
